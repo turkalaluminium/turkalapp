@@ -69,7 +69,7 @@ export default function GuncelSiparisler() {
   const [durumFilter, setDurumFilter] = useState('all')
   const [sevkFilter, setSevkFilter] = useState('all')
   const [terminFilter, setTerminFilter] = useState('all')
-  const [hazirlikSort, setHazirlikSort] = useState('termin')
+  const [hazirlikSort, setHazirlikSort] = useState('pctDesc')
 
   async function yukle() {
     try {
