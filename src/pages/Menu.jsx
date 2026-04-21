@@ -160,25 +160,6 @@ export default function Menu() {
           </button>
         )}
 
-        {(role === ROLES.PATRON || role === ROLES.SATIS) && (
-          <button
-            onClick={() => navigate('/kaydedilenler')}
-            className="w-full text-left p-4 rounded-xl border border-gray-100 bg-gray-50 active:bg-gray-100 transition-colors"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <span className="text-lg">📋</span>
-                <div>
-                  <p className="font-medium text-gray-700 text-sm">Kaydedilen Firmalar</p>
-                  <p className="text-gray-400 text-xs mt-0.5">Takip listesi</p>
-                </div>
-              </div>
-              <svg className="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
-          </button>
-        )}
       </div>
 
       <div className="pb-8 pt-4">

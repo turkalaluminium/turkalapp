@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Splash from './pages/Splash'
 import Giris from './pages/Giris'
 import Menu from './pages/Menu'
-import Kaydedilenler from './pages/Kaydedilenler'
 import Fiyatlandirma from './pages/Fiyatlandirma'
 import KalipTeknikCizim from './pages/KalipTeknikCizim'
 import UretimRaporlari from './pages/UretimRaporlari'
@@ -21,7 +20,7 @@ export default function App() {
           <Route path="/giris" element={<Giris />} />
           <Route path="/menu" element={<RequireRole><Menu /></RequireRole>} />
           <Route path="/ara" element={<Navigate to="/menu" replace />} />
-          <Route path="/kaydedilenler" element={<RequireRole roles={[ROLES.PATRON, ROLES.SATIS]}><Kaydedilenler /></RequireRole>} />
+          <Route path="/kaydedilenler" element={<Navigate to="/menu" replace />} />
           <Route path="/fiyatlandirma" element={<RequireRole roles={[ROLES.PATRON, ROLES.SATIS]}><Fiyatlandirma /></RequireRole>} />
           <Route path="/kalip-teknik-cizim" element={<RequireRole roles={[ROLES.PATRON, ROLES.SATIS]}><KalipTeknikCizim /></RequireRole>} />
           <Route path="/uretim-raporlari" element={<RequireRole roles={[ROLES.PATRON]}><UretimRaporlari /></RequireRole>} />
