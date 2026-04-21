@@ -162,27 +162,6 @@ export default function Menu() {
 
         {(role === ROLES.PATRON || role === ROLES.SATIS) && (
           <button
-            onClick={() => navigate('/ara')}
-            className="w-full text-left p-5 rounded-xl border-2 bg-white active:bg-red-50 transition-colors"
-            style={{ borderColor: '#CC2B1D' }}
-          >
-            <div className="flex items-start gap-4">
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
-                style={{ backgroundColor: '#FDECEA' }}
-              >
-                🔍
-              </div>
-              <div>
-                <p className="font-semibold text-base" style={{ color: '#CC2B1D' }}>Yeni Musteri Ara</p>
-                <p className="text-gray-400 text-sm mt-0.5">Anahtar kelime + ulke sec</p>
-              </div>
-            </div>
-          </button>
-        )}
-
-        {(role === ROLES.PATRON || role === ROLES.SATIS) && (
-          <button
             onClick={() => navigate('/kaydedilenler')}
             className="w-full text-left p-4 rounded-xl border border-gray-100 bg-gray-50 active:bg-gray-100 transition-colors"
           >
