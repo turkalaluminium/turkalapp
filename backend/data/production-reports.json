@@ -1,0 +1,338 @@
+[
+  {
+    "tarih": "2026-04-18",
+    "presTon": 0,
+    "eloksalTon": 1698,
+    "not": "",
+    "eloksalDetay": {
+      "baraSayisi": 25,
+      "yagAlmaBaraSayisi": 0,
+      "matBaraSayisi": 19,
+      "renkBaraSayisi": 6,
+      "calisanKisiSayisi": 17,
+      "arizaNotu": "17 Kişi ile  6 saat üretim yapılmıştır"
+    },
+    "presDetay": {
+      "calisanPresSayisi": 0,
+      "pres1Kg": 0,
+      "pres2Kg": 0,
+      "pres3Kg": 0,
+      "pres1FiresiPct": 0,
+      "pres2FiresiPct": 0,
+      "arizaNotu": ""
+    },
+    "guncellenme": "2026-04-20T11:47:34.744Z"
+  },
+  {
+    "tarih": "2026-04-17",
+    "presTon": 2235,
+    "eloksalTon": 2583,
+    "not": "",
+    "guncellenme": "2026-04-20T11:46:51.934Z",
+    "eloksalDetay": {
+      "baraSayisi": 45,
+      "yagAlmaBaraSayisi": 0,
+      "matBaraSayisi": 22,
+      "renkBaraSayisi": 23,
+      "calisanKisiSayisi": 0,
+      "arizaNotu": "4 saat 8 kişi, 8 saat 6 kişi çalışmıştır 1 saat Cuma namazı"
+    },
+    "presDetay": {
+      "calisanPresSayisi": 1,
+      "pres1Kg": 0,
+      "pres2Kg": 2235,
+      "pres3Kg": 0,
+      "pres1FiresiPct": 0,
+      "pres2FiresiPct": 26,
+      "arizaNotu": ""
+    }
+  },
+  {
+    "tarih": "2026-04-16",
+    "presTon": 2767,
+    "eloksalTon": 3087,
+    "not": "",
+    "guncellenme": "2026-04-20T11:44:22.301Z",
+    "eloksalDetay": {
+      "baraSayisi": 57,
+      "yagAlmaBaraSayisi": 0,
+      "matBaraSayisi": 20,
+      "renkBaraSayisi": 37,
+      "calisanKisiSayisi": 0,
+      "arizaNotu": ""
+    },
+    "presDetay": {
+      "calisanPresSayisi": 1,
+      "pres1Kg": 0,
+      "pres2Kg": 2767,
+      "pres3Kg": 0,
+      "pres1FiresiPct": 0,
+      "pres2FiresiPct": 15,
+      "arizaNotu": ""
+    }
+  },
+  {
+    "tarih": "2026-04-15",
+    "presTon": 2315,
+    "eloksalTon": 3317,
+    "not": "",
+    "guncellenme": "2026-04-20T11:42:58.236Z",
+    "eloksalDetay": {
+      "baraSayisi": 52,
+      "yagAlmaBaraSayisi": 0,
+      "matBaraSayisi": 31,
+      "renkBaraSayisi": 21,
+      "calisanKisiSayisi": 0,
+      "arizaNotu": ""
+    },
+    "presDetay": {
+      "calisanPresSayisi": 1,
+      "pres1Kg": 0,
+      "pres2Kg": 2315,
+      "pres3Kg": 0,
+      "pres1FiresiPct": 0,
+      "pres2FiresiPct": 18,
+      "arizaNotu": "KIRKLARELİ:  08:00-11:00 PULLER ÇENE KOLU AYARLANDI"
+    }
+  },
+  {
+    "tarih": "2026-04-14",
+    "presTon": 4496,
+    "eloksalTon": 4102,
+    "not": "",
+    "guncellenme": "2026-04-20T11:41:16.322Z",
+    "eloksalDetay": {
+      "baraSayisi": 48,
+      "yagAlmaBaraSayisi": 0,
+      "matBaraSayisi": 38,
+      "renkBaraSayisi": 10,
+      "calisanKisiSayisi": 0,
+      "arizaNotu": ""
+    },
+    "presDetay": {
+      "calisanPresSayisi": 2,
+      "pres1Kg": 1913,
+      "pres2Kg": 2583,
+      "pres3Kg": 0,
+      "pres1FiresiPct": 14,
+      "pres2FiresiPct": 19,
+      "arizaNotu": "KIRKLARELİ: 08:00-08:40 BİLLET FIRINI TERMEKOP ARIZASI 08:40-09:09 BİLLET FIRINI ISINMASI"
+    }
+  },
+  {
+    "tarih": "2026-04-13",
+    "presTon": 5135,
+    "eloksalTon": 3536,
+    "not": "",
+    "guncellenme": "2026-04-20T11:18:22.915Z",
+    "eloksalDetay": {
+      "baraSayisi": 45,
+      "yagAlmaBaraSayisi": 0,
+      "matBaraSayisi": 39,
+      "renkBaraSayisi": 6,
+      "calisanKisiSayisi": 0,
+      "arizaNotu": ""
+    },
+    "presDetay": {
+      "calisanPresSayisi": 2,
+      "pres1Kg": 1860,
+      "pres2Kg": 3275,
+      "pres3Kg": 0,
+      "pres1FiresiPct": 20,
+      "pres2FiresiPct": 14,
+      "arizaNotu": "HADIMKÖY: BİLLET ISINMASINSINDA İMALATA 9:00 DA BAŞLANDI  KIRKLARELİ: 8:00-8:30 BİLLET FIRINI ISINMASI"
+    }
+  },
+  {
+    "tarih": "2026-04-10",
+    "presTon": 4705,
+    "eloksalTon": 2791,
+    "not": "",
+    "guncellenme": "2026-04-20T11:05:03.744Z",
+    "eloksalDetay": {
+      "baraSayisi": 35,
+      "yagAlmaBaraSayisi": 0,
+      "matBaraSayisi": 30,
+      "renkBaraSayisi": 5,
+      "calisanKisiSayisi": 0,
+      "arizaNotu": "2,5 SAAT VİNÇ ARIZASI 1 SAAT CUMA NAMAZI"
+    },
+    "presDetay": {
+      "calisanPresSayisi": 2,
+      "pres1Kg": 1842,
+      "pres2Kg": 2863,
+      "pres3Kg": 0,
+      "pres1FiresiPct": 12,
+      "pres2FiresiPct": 16,
+      "arizaNotu": "1 SAAT CUMA NAMAZI  KIRKLARELİ: 14:40-15:05 HAVA KESİNTİSİ"
+    }
+  },
+  {
+    "tarih": "2026-04-09",
+    "presTon": 4358,
+    "eloksalTon": 1834,
+    "not": "",
+    "guncellenme": "2026-04-20T11:02:45.155Z",
+    "eloksalDetay": {
+      "baraSayisi": 44,
+      "yagAlmaBaraSayisi": 0,
+      "matBaraSayisi": 40,
+      "renkBaraSayisi": 4,
+      "calisanKisiSayisi": 0,
+      "arizaNotu": "3 SAAT VİNÇ ARIZASI - Proline mikronlu malzemeler ayaklara bağlandı"
+    },
+    "presDetay": {
+      "calisanPresSayisi": 2,
+      "pres1Kg": 2187,
+      "pres2Kg": 2171,
+      "pres3Kg": 0,
+      "pres1FiresiPct": 14,
+      "pres2FiresiPct": 14,
+      "arizaNotu": "KIRKLARELİ: 09:00-09:40 Pompa termiikleri değişecek 16:00-20:00 Dummy değişimi ısınmadı beklendi"
+    }
+  },
+  {
+    "tarih": "2026-04-08",
+    "presTon": 5207,
+    "eloksalTon": 2021,
+    "not": "",
+    "guncellenme": "2026-04-20T11:00:04.926Z",
+    "eloksalDetay": {
+      "baraSayisi": 43,
+      "yagAlmaBaraSayisi": 0,
+      "matBaraSayisi": 33,
+      "renkBaraSayisi": 10,
+      "calisanKisiSayisi": 16,
+      "arizaNotu": "Proline mikronlu malzemeler ayaklara bağlandı"
+    },
+    "presDetay": {
+      "calisanPresSayisi": 2,
+      "pres1Kg": 1963,
+      "pres2Kg": 3244,
+      "pres3Kg": 0,
+      "pres1FiresiPct": 21,
+      "pres2FiresiPct": 13,
+      "arizaNotu": ""
+    }
+  },
+  {
+    "tarih": "2026-04-07",
+    "presTon": 4925,
+    "eloksalTon": 2170,
+    "not": "",
+    "guncellenme": "2026-04-20T10:58:19.053Z",
+    "eloksalDetay": {
+      "baraSayisi": 41,
+      "yagAlmaBaraSayisi": 0,
+      "matBaraSayisi": 16,
+      "renkBaraSayisi": 25,
+      "calisanKisiSayisi": 15,
+      "arizaNotu": ""
+    },
+    "presDetay": {
+      "calisanPresSayisi": 2,
+      "pres1Kg": 2235,
+      "pres2Kg": 2690,
+      "pres3Kg": 0,
+      "pres1FiresiPct": 16,
+      "pres2FiresiPct": 17,
+      "arizaNotu": "KIRKLARELİ: 08:00-08:30 billet fırını ısınması 11:55-12:15 puller çene pistonu yerine takıldı 18:00-18:15 pres baskıya geçmedi"
+    }
+  },
+  {
+    "tarih": "2026-04-06",
+    "presTon": 3595,
+    "eloksalTon": 2547,
+    "not": "",
+    "guncellenme": "2026-04-20T10:54:45.385Z",
+    "eloksalDetay": {
+      "baraSayisi": 35,
+      "yagAlmaBaraSayisi": 0,
+      "matBaraSayisi": 16,
+      "renkBaraSayisi": 19,
+      "calisanKisiSayisi": 14,
+      "arizaNotu": ""
+    },
+    "presDetay": {
+      "calisanPresSayisi": 2,
+      "pres1Kg": 1051,
+      "pres2Kg": 2544,
+      "pres3Kg": 0,
+      "pres1FiresiPct": 14,
+      "pres2FiresiPct": 21,
+      "arizaNotu": "PRES-1 kovan arızası nedeniyle 5,5 saat imalat yapılamadı"
+    }
+  },
+  {
+    "tarih": "2026-04-03",
+    "presTon": 5110,
+    "eloksalTon": 2142,
+    "not": "",
+    "guncellenme": "2026-04-20T10:51:55.380Z",
+    "eloksalDetay": {
+      "baraSayisi": 32,
+      "yagAlmaBaraSayisi": 0,
+      "matBaraSayisi": 8,
+      "renkBaraSayisi": 24,
+      "calisanKisiSayisi": 14,
+      "arizaNotu": "1 SAAT VİNÇ ARIZASI 1 SAAT CUMA NAMAZI"
+    },
+    "presDetay": {
+      "calisanPresSayisi": 2,
+      "pres1Kg": 2817,
+      "pres2Kg": 2293,
+      "pres3Kg": 0,
+      "pres1FiresiPct": 12,
+      "pres2FiresiPct": 20,
+      "arizaNotu": "KIRKLARELİ: 17:00-20:00 KOVAN KOLU YAĞ KEÇESİ DEĞİŞİMİ"
+    }
+  },
+  {
+    "tarih": "2026-04-02",
+    "presTon": 9266,
+    "eloksalTon": 2757,
+    "not": "",
+    "guncellenme": "2026-04-20T10:50:04.410Z",
+    "eloksalDetay": {
+      "baraSayisi": 46,
+      "yagAlmaBaraSayisi": 0,
+      "matBaraSayisi": 13,
+      "renkBaraSayisi": 33,
+      "calisanKisiSayisi": 15,
+      "arizaNotu": ""
+    },
+    "presDetay": {
+      "calisanPresSayisi": 2,
+      "pres1Kg": 5861,
+      "pres2Kg": 3405,
+      "pres3Kg": 0,
+      "pres1FiresiPct": 16,
+      "pres2FiresiPct": 17,
+      "arizaNotu": ""
+    }
+  },
+  {
+    "tarih": "2026-04-01",
+    "presTon": 8836,
+    "eloksalTon": 2797,
+    "not": "",
+    "guncellenme": "2026-04-20T10:49:34.639Z",
+    "eloksalDetay": {
+      "baraSayisi": 54,
+      "yagAlmaBaraSayisi": 0,
+      "matBaraSayisi": 19,
+      "renkBaraSayisi": 35,
+      "calisanKisiSayisi": 0,
+      "arizaNotu": ""
+    },
+    "presDetay": {
+      "calisanPresSayisi": 2,
+      "pres1Kg": 5942,
+      "pres2Kg": 2894,
+      "pres3Kg": 0,
+      "pres1FiresiPct": 15,
+      "pres2FiresiPct": 15,
+      "arizaNotu": ""
+    }
+  }
+]

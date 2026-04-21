@@ -1,0 +1,28 @@
+{
+  "name": "Turkal Aluminium",
+  "short_name": "Turkal",
+  "description": "Turkal Aluminium ihracat yönetim paneli",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#CC2B1D",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/turkal-logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/turkal-logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/turkal-logo.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
