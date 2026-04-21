@@ -441,7 +441,15 @@ function getDrawings() {
 
 app.get('/api/technical-drawings', (req, res) => {
   if (!TECH_DRAWINGS_DIR) {
-    return res.status(503).json({ error: 'TECH_DRAWINGS_DIR bulunamadi' })
+    return res.json({
+      total: 0,
+      rawTotal: 0,
+      dedupedTotal: 0,
+      filtered: 0,
+      rootDir: null,
+      items: [],
+      warning: 'TECH_DRAWINGS_DIR bulunamadi',
+    })
   }
   const q = String(req.query.q || '').trim().toLowerCase()
   const { items: all, rawTotal, dedupedTotal } = getDrawings()
@@ -463,7 +471,7 @@ app.get('/api/technical-drawings', (req, res) => {
 
 app.get('/api/technical-drawings/:id/file', (req, res) => {
   if (!TECH_DRAWINGS_DIR) {
-    return res.status(503).json({ error: 'TECH_DRAWINGS_DIR bulunamadi' })
+    return res.status(404).json({ error: 'Bu sunucuda teknik cizim arsivi bagli degil' })
   }
 
   let relative

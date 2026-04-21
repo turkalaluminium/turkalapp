@@ -8,6 +8,7 @@ export default function KalipTeknikCizim() {
   const [cizimler, setCizimler] = useState([])
   const [cizimLoading, setCizimLoading] = useState(false)
   const [cizimError, setCizimError] = useState('')
+  const [cizimUyari, setCizimUyari] = useState('')
   const [seciliCizimId, setSeciliCizimId] = useState(null)
   const [gosterilenCizimId, setGosterilenCizimId] = useState(null)
 
@@ -15,6 +16,7 @@ export default function KalipTeknikCizim() {
     let aktif = true
     setCizimLoading(true)
     setCizimError('')
+    setCizimUyari('')
 
     fetch(apiUrl('/api/technical-drawings'))
       .then(async (res) => {
@@ -23,6 +25,7 @@ export default function KalipTeknikCizim() {
         if (!aktif) return
         const items = Array.isArray(data.items) ? data.items : []
         setCizimler(items)
+        setCizimUyari(String(data.warning || '').trim())
         if (!seciliCizimId && items[0]?.id) setSeciliCizimId(items[0].id)
       })
       .catch((err) => {
@@ -91,12 +94,17 @@ export default function KalipTeknikCizim() {
           </button>
         </div>
 
-        {filtreli.length === 0 && !cizimLoading && (
+        {filtreli.length === 0 && !cizimLoading && !cizimUyari && (
           <p className="text-sm text-gray-400 text-center py-8">Sonuc bulunamadı</p>
         )}
 
         {cizimLoading && (
           <p className="text-sm text-gray-400">Teknik cizimler yukleniyor...</p>
+        )}
+        {cizimUyari && (
+          <p className="text-sm text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+            Bu ortamda teknik cizim arsivi bagli degil. Sunucuya klasor baglandiginda liste otomatik gorunur.
+          </p>
         )}
         {cizimError && (
           <p className="text-sm text-red-500">{cizimError}</p>
