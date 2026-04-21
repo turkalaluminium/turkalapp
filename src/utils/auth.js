@@ -15,7 +15,7 @@ export const ROLE_LABELS = {
 // Not: Bu app icin basit rol girisi. Gerekirse backend auth'a tasinabilir.
 const USERS = [
   { username: 'patron', password: 'turkal123', role: ROLES.PATRON, name: 'Patron' },
-  { username: 'operator', password: 'turkal123', role: ROLES.OPERATOR, name: 'Operator' },
+  { username: 'üretim', password: 'turkal123', role: ROLES.OPERATOR, name: 'Operator' },
   { username: 'satis', password: 'turkal123', role: ROLES.SATIS, name: 'Satis' },
 ]
 

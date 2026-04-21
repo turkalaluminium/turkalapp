@@ -35,7 +35,7 @@ export default function Giris() {
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          placeholder="Kullanici adi (patron / operator / satis)"
+          placeholder="Kullanici adi"
           className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 focus:outline-none focus:border-gray-400"
         />
         <input
@@ -57,11 +57,6 @@ export default function Giris() {
       >
         Giris Yap
       </button>
-
-      <div className="mt-5 text-xs text-gray-400 space-y-1">
-        <p>Demo kullanicilar: patron / operator / satis</p>
-        <p>Demo sifre: turkal123</p>
-      </div>
     </div>
   )
 }
