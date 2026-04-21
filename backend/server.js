@@ -716,7 +716,7 @@ app.get('/api/lme-aluminum', async (req, res) => {
 //  SUNUCU
 // ============================================================
 
-const PORT = process.env.BACKEND_PORT || 3001
+const PORT = process.env.PORT || process.env.BACKEND_PORT || 3001
 app.listen(PORT, () => {
   console.log(`✅ Sunucu çalışıyor: http://localhost:${PORT}`)
   console.log(`   - CORS allowlist: ${[...allowedOrigins].join(', ') || '(boş)'}`)
