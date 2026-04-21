@@ -69,6 +69,7 @@ export default function GuncelSiparisler() {
   const [durumFilter, setDurumFilter] = useState('all')
   const [sevkFilter, setSevkFilter] = useState('all')
   const [terminFilter, setTerminFilter] = useState('all')
+  const [hazirlikSort, setHazirlikSort] = useState('termin')
 
   async function yukle() {
     try {
@@ -115,7 +116,7 @@ export default function GuncelSiparisler() {
 
   const filteredItems = useMemo(() => {
     const q = String(arama || '').trim().toLowerCase()
-    return enrichedItems.filter((x) => {
+    const filtered = enrichedItems.filter((x) => {
       const pct = Number(x.ilerlemeYuzde || 0)
       const durumKey = pct >= 100 ? 'tamamlandi' : 'devam'
       const terminKey = x.terminStatus.key
@@ -137,7 +138,25 @@ export default function GuncelSiparisler() {
       const alan = `${x.ulke} ${x.firma} ${x.siparisAdi} ${x.durumNotu || ''}`.toLowerCase()
       return alan.includes(q)
     })
-  }, [arama, ulkeFilter, firmaFilter, durumFilter, sevkFilter, terminFilter, enrichedItems])
+
+    if (hazirlikSort === 'pctDesc') {
+      return [...filtered].sort((a, b) => {
+        const byPct = Number(b.ilerlemeYuzde || 0) - Number(a.ilerlemeYuzde || 0)
+        if (byPct !== 0) return byPct
+        return String(b.guncellenme || '').localeCompare(String(a.guncellenme || ''))
+      })
+    }
+
+    if (hazirlikSort === 'pctAsc') {
+      return [...filtered].sort((a, b) => {
+        const byPct = Number(a.ilerlemeYuzde || 0) - Number(b.ilerlemeYuzde || 0)
+        if (byPct !== 0) return byPct
+        return String(b.guncellenme || '').localeCompare(String(a.guncellenme || ''))
+      })
+    }
+
+    return filtered
+  }, [arama, ulkeFilter, firmaFilter, durumFilter, sevkFilter, terminFilter, hazirlikSort, enrichedItems])
 
   const ozet = useMemo(() => {
     const toplam = items.length
@@ -273,6 +292,11 @@ export default function GuncelSiparisler() {
               <option value="yaklasan">Yaklasan (0-3 gun)</option>
               <option value="normal">Normal</option>
               <option value="terminYok">Termin yok</option>
+            </select>
+            <select value={hazirlikSort} onChange={(e) => setHazirlikSort(e.target.value)} className="border border-gray-200 rounded-lg px-2 py-2 text-xs bg-white col-span-2">
+              <option value="termin">Siralama: Termin oncelikli</option>
+              <option value="pctDesc">Siralama: Hazirlik % (buyukten kucuge)</option>
+              <option value="pctAsc">Siralama: Hazirlik % (kucukten buyuge)</option>
             </select>
           </div>
           <p className="text-[11px] text-gray-400">Gorunen siparis: {filteredItems.length}</p>
