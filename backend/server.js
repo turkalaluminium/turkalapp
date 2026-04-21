@@ -33,13 +33,33 @@ app.use(cors({
 }))
 app.use(express.json({ limit: '30mb' }))
 
+function resolveDataFilePath({ envValue, fallbackFileName }) {
+  const raw = String(envValue || '').trim()
+  if (!raw) return resolvePersistentDefaultPath(fallbackFileName)
+
+  if (path.isAbsolute(raw)) return raw
+
+  // "backend/data/..." gibi eski relative değerleri normalize et.
+  const normalized = raw.replace(/^\.?[\\/]/, '').replace(/^backend[\\/]/i, '')
+  return path.join(__dirname, normalized)
+}
+
+function resolvePersistentDefaultPath(fileName) {
+  const railwayDataRoot = '/data'
+  if (process.env.RAILWAY_ENVIRONMENT || fs.existsSync(railwayDataRoot)) {
+    return path.join(railwayDataRoot, fileName)
+  }
+  return path.join(__dirname, 'data', fileName)
+}
+
 // ============================================================
 //  URETIM RAPORLARI — ortak veri kaynagi (patron sadece gorur)
 // ============================================================
 
-const PRODUCTION_REPORTS_FILE = path.resolve(
-  process.env.PRODUCTION_REPORTS_FILE || path.join(__dirname, 'data', 'production-reports.json')
-)
+const PRODUCTION_REPORTS_FILE = path.resolve(resolveDataFilePath({
+  envValue: process.env.PRODUCTION_REPORTS_FILE,
+  fallbackFileName: 'production-reports.json',
+}))
 const PRODUCTION_REPORTS_WRITE_KEY = String(process.env.PRODUCTION_REPORTS_WRITE_KEY || '').trim()
 
 function toNonNegativeNumber(v) {
@@ -164,9 +184,10 @@ app.post('/api/production-reports', (req, res) => {
 //  GUNCEL SIPARISLER — patron izler, operator girer/gunceller
 // ============================================================
 
-const CURRENT_ORDERS_FILE = path.resolve(
-  process.env.CURRENT_ORDERS_FILE || path.join(__dirname, 'data', 'current-orders.json')
-)
+const CURRENT_ORDERS_FILE = path.resolve(resolveDataFilePath({
+  envValue: process.env.CURRENT_ORDERS_FILE,
+  fallbackFileName: 'current-orders.json',
+}))
 
 function normalizeOrder(x) {
   const rawPct = Number(x?.ilerlemeYuzde ?? 0)

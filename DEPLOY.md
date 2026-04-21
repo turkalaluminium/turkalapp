@@ -27,8 +27,8 @@ Bu proje icin en hizli ve stabil yapi:
    - `SERPER_API_KEY`
    - `CORS_ALLOWED_ORIGINS` (simdilik bos birakabilirsin)
    - `CORS_ALLOW_VERCEL_PREVIEWS=true`
-   - `PRODUCTION_REPORTS_FILE=backend/data/production-reports.json`
-   - `CURRENT_ORDERS_FILE=backend/data/current-orders.json`
+   - `PRODUCTION_REPORTS_FILE=/data/production-reports.json`
+   - `CURRENT_ORDERS_FILE=/data/current-orders.json`
 7. Hemen test:
    - `https://...railway.app/health` -> `{ "ok": true }`
 
