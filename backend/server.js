@@ -31,7 +31,7 @@ app.use(cors({
     return callback(null, false)
   },
 }))
-app.use(express.json({ limit: '1mb' }))
+app.use(express.json({ limit: '30mb' }))
 
 // ============================================================
 //  URETIM RAPORLARI — ortak veri kaynagi (patron sadece gorur)
@@ -272,9 +272,9 @@ app.post('/api/current-orders', (req, res) => {
 const DRAWING_EXTENSIONS = new Set(['.pdf', '.dwg', '.dxf'])
 const DRAWINGS_CACHE_MS = 60 * 1000
 let drawingsCache = { time: 0, payload: { items: [], rawTotal: 0, dedupedTotal: 0 } }
+const TECH_DRAWINGS_UPLOAD_KEY = String(process.env.TECH_DRAWINGS_UPLOAD_KEY || '').trim()
 
 const drawingDirCandidates = [
-  process.env.TECH_DRAWINGS_DIR,
   'C:/Users/Lenovo/Desktop/TEKNİK ÇİZİM',
   'C:/Users/Lenovo/Desktop/TEKNIK CIZIM',
   path.resolve(__dirname, '../TEKNIK CIZIM'),
@@ -282,13 +282,15 @@ const drawingDirCandidates = [
   .filter(Boolean)
   .map((p) => path.resolve(p))
 
-const TECH_DRAWINGS_DIR = drawingDirCandidates.find((p) => {
+const configuredDrawingsDir = String(process.env.TECH_DRAWINGS_DIR || '').trim()
+const existingDrawingDir = drawingDirCandidates.find((p) => {
   try {
     return fs.existsSync(p) && fs.statSync(p).isDirectory()
   } catch {
     return false
   }
 }) || null
+const TECH_DRAWINGS_DIR = configuredDrawingsDir ? path.resolve(configuredDrawingsDir) : existingDrawingDir
 
 function toPosix(p) {
   return String(p).replace(/\\/g, '/')
@@ -322,6 +324,16 @@ function resolveDrawingAbsolutePath(relativePath) {
   const root = path.resolve(TECH_DRAWINGS_DIR)
   if (abs !== root && !abs.startsWith(root + path.sep)) return null
   return abs
+}
+
+function ensureTechDrawingsDir() {
+  if (!TECH_DRAWINGS_DIR) return false
+  try {
+    fs.mkdirSync(TECH_DRAWINGS_DIR, { recursive: true })
+    return fs.existsSync(TECH_DRAWINGS_DIR) && fs.statSync(TECH_DRAWINGS_DIR).isDirectory()
+  } catch {
+    return false
+  }
 }
 
 function walkDrawings(dir, output) {
@@ -488,6 +500,62 @@ app.get('/api/technical-drawings/:id/file', (req, res) => {
 
   res.setHeader('Content-Disposition', `inline; filename="${path.basename(abs)}"`)
   return res.sendFile(abs)
+})
+
+app.post('/api/technical-drawings/upload', (req, res) => {
+  if (!TECH_DRAWINGS_UPLOAD_KEY) {
+    return res.status(503).json({ error: 'TECH_DRAWINGS_UPLOAD_KEY tanimli degil' })
+  }
+  const key = String(req.headers['x-upload-key'] || '')
+  if (key !== TECH_DRAWINGS_UPLOAD_KEY) {
+    return res.status(401).json({ error: 'Yetkisiz yukleme istegi' })
+  }
+  if (!ensureTechDrawingsDir()) {
+    return res.status(503).json({ error: 'TECH_DRAWINGS_DIR hazir degil' })
+  }
+
+  const relativePath = String(req.body?.relativePath || '').trim().replace(/\\/g, '/')
+  const contentBase64 = String(req.body?.contentBase64 || '')
+  const overwrite = Boolean(req.body?.overwrite)
+
+  if (!relativePath || relativePath.includes('\0')) {
+    return res.status(400).json({ error: 'relativePath zorunlu' })
+  }
+
+  const ext = path.extname(relativePath).toLowerCase()
+  if (!DRAWING_EXTENSIONS.has(ext)) {
+    return res.status(400).json({ error: 'Desteklenmeyen dosya uzantisi' })
+  }
+
+  const abs = resolveDrawingAbsolutePath(relativePath)
+  if (!abs) {
+    return res.status(400).json({ error: 'Gecersiz dosya yolu' })
+  }
+
+  let fileBuffer
+  try {
+    fileBuffer = Buffer.from(contentBase64, 'base64')
+  } catch {
+    return res.status(400).json({ error: 'contentBase64 gecersiz' })
+  }
+  if (!fileBuffer.length) {
+    return res.status(400).json({ error: 'Bos dosya yuklenemez' })
+  }
+  if (fileBuffer.length > 20 * 1024 * 1024) {
+    return res.status(413).json({ error: 'Dosya limiti asildi (20MB)' })
+  }
+
+  try {
+    fs.mkdirSync(path.dirname(abs), { recursive: true })
+    if (!overwrite && fs.existsSync(abs)) {
+      return res.status(409).json({ error: 'Dosya zaten var', relativePath })
+    }
+    fs.writeFileSync(abs, fileBuffer)
+    drawingsCache = { time: 0, payload: { items: [], rawTotal: 0, dedupedTotal: 0 } }
+    return res.json({ ok: true, relativePath, sizeBytes: fileBuffer.length })
+  } catch (err) {
+    return res.status(500).json({ error: `Yukleme basarisiz: ${err.message}` })
+  }
 })
 
 // ============================================================
