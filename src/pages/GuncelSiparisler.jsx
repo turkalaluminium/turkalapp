@@ -71,6 +71,16 @@ export default function GuncelSiparisler() {
   const [terminFilter, setTerminFilter] = useState('all')
   const [hazirlikSort, setHazirlikSort] = useState('pctDesc')
 
+  function filtreleriSifirla() {
+    setArama('')
+    setUlkeFilter('all')
+    setFirmaFilter('all')
+    setDurumFilter('all')
+    setSevkFilter('all')
+    setTerminFilter('all')
+    setHazirlikSort('pctDesc')
+  }
+
   async function yukle() {
     try {
       setLoading(true)
@@ -299,6 +309,13 @@ export default function GuncelSiparisler() {
               <option value="pctAsc">Siralama: Hazirlik % (kucukten buyuge)</option>
             </select>
           </div>
+          <button
+            type="button"
+            onClick={filtreleriSifirla}
+            className="w-full py-2 rounded-lg text-xs font-medium border border-gray-200 text-gray-600 bg-gray-50"
+          >
+            Filtreleri Sifirla
+          </button>
           <p className="text-[11px] text-gray-400">Gorunen siparis: {filteredItems.length}</p>
         </div>
 
