@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { apiUrl } from '../utils/api'
 
@@ -59,6 +59,14 @@ export default function GuncelSiparisDurumGirisi() {
   useEffect(() => {
     yukle()
   }, [])
+
+  const alfabetikItems = useMemo(() => {
+    return [...items].sort((a, b) => {
+      const aKey = `${a.ulke || ''} ${a.firma || ''} ${a.siparisAdi || ''}`.trim()
+      const bKey = `${b.ulke || ''} ${b.firma || ''} ${b.siparisAdi || ''}`.trim()
+      return aKey.localeCompare(bKey, 'tr', { sensitivity: 'base' })
+    })
+  }, [items])
 
   function seciliYukle(item) {
     setForm({
@@ -173,7 +181,7 @@ export default function GuncelSiparisDurumGirisi() {
             className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm text-gray-700 bg-white"
           >
             <option value="">Sec...</option>
-            {items.map((x) => (
+            {alfabetikItems.map((x) => (
               <option key={x.id} value={x.id}>
                 {x.ulke} - {x.firma} / %{Number(x.ilerlemeYuzde || 0)} / {Number(x.siparisKg || 0).toLocaleString('tr-TR')} kg
               </option>
