@@ -249,9 +249,7 @@ app.post('/api/current-orders', (req, res) => {
 
   const list = readCurrentOrders()
   const idxById = list.findIndex((x) => x.id === finalItem.id)
-  const idxByTitle = idxById >= 0 ? -1 : list.findIndex((x) => orderTitle(x) === orderTitle(finalItem))
-  const idx = idxById >= 0 ? idxById : idxByTitle
-  if (idx >= 0) list[idx] = { ...list[idx], ...finalItem }
+  if (idxById >= 0) list[idxById] = { ...list[idxById], ...finalItem }
   else list.unshift(finalItem)
 
   list.sort((a, b) => String(b.guncellenme || '').localeCompare(String(a.guncellenme || '')))
