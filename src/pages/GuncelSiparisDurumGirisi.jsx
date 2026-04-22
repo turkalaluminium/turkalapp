@@ -12,6 +12,7 @@ const INITIAL_FORM = {
   id: '',
   ulke: '',
   firma: '',
+  siparisNo: '',
   siparisAdi: '',
   siparisKg: '',
   ilerlemeYuzde: '',
@@ -73,6 +74,7 @@ export default function GuncelSiparisDurumGirisi() {
       id: item.id || '',
       ulke: item.ulke || '',
       firma: item.firma || '',
+      siparisNo: item.siparisNo || '',
       siparisAdi: item.siparisAdi || '',
       siparisKg: String(item.siparisKg ?? ''),
       ilerlemeYuzde: String(item.ilerlemeYuzde ?? ''),
@@ -210,6 +212,16 @@ export default function GuncelSiparisDurumGirisi() {
         <div>
           <label className="block text-xs font-medium text-gray-500 mb-1.5">Siparis adi</label>
           <input value={form.siparisAdi} onChange={(e) => setForm((f) => ({ ...f, siparisAdi: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm" />
+        </div>
+
+        <div>
+          <label className="block text-xs font-medium text-gray-500 mb-1.5">Siparis numarasi (opsiyonel)</label>
+          <input
+            value={form.siparisNo}
+            onChange={(e) => setForm((f) => ({ ...f, siparisNo: e.target.value }))}
+            placeholder="Orn: TRK-2026-041"
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm"
+          />
         </div>
 
         <div>

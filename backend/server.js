@@ -198,6 +198,7 @@ function normalizeOrder(x) {
     id: String(x?.id || '').trim(),
     ulke: String(x?.ulke || '').trim(),
     firma: String(x?.firma || '').trim(),
+    siparisNo: String(x?.siparisNo || '').trim(),
     siparisAdi: String(x?.siparisAdi || '').trim(),
     siparisKg,
     ilerlemeYuzde: pct,

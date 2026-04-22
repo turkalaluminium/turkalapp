@@ -392,6 +392,9 @@ export default function GuncelSiparisler() {
                     <p className="text-sm font-semibold text-gray-800">{x.ulke} - {x.firma}</p>
                   </div>
                   <p className="text-xs text-gray-500 mt-0.5">{x.siparisAdi}</p>
+                  {x.siparisNo && (
+                    <p className="text-[11px] text-gray-400 mt-0.5">Siparis No: {x.siparisNo}</p>
+                  )}
                 </div>
                 <div className="flex flex-col items-end gap-1">
                   {x.sevkEdildi && (
