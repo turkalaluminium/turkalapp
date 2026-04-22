@@ -6,7 +6,7 @@ export default function KalipTeknikCizim() {
   const navigate = useNavigate()
   const [q, setQ] = useState('')
   const [cizimler, setCizimler] = useState([])
-  const [cizimLoading, setCizimLoading] = useState(false)
+  const [cizimLoading, setCizimLoading] = useState(true)
   const [cizimError, setCizimError] = useState('')
   const [cizimUyari, setCizimUyari] = useState('')
   const [seciliCizimId, setSeciliCizimId] = useState(null)
@@ -14,9 +14,6 @@ export default function KalipTeknikCizim() {
 
   useEffect(() => {
     let aktif = true
-    setCizimLoading(true)
-    setCizimError('')
-    setCizimUyari('')
 
     fetch(apiUrl('/api/technical-drawings'))
       .then(async (res) => {
@@ -26,7 +23,7 @@ export default function KalipTeknikCizim() {
         const items = Array.isArray(data.items) ? data.items : []
         setCizimler(items)
         setCizimUyari(String(data.warning || '').trim())
-        if (!seciliCizimId && items[0]?.id) setSeciliCizimId(items[0].id)
+        setSeciliCizimId((prev) => prev || items[0]?.id || null)
       })
       .catch((err) => {
         if (!aktif) return
@@ -37,7 +34,7 @@ export default function KalipTeknikCizim() {
       })
 
     return () => { aktif = false }
-  }, [seciliCizimId])
+  }, [])
 
   const filtreli = useMemo(() => {
     const aranan = q.trim().toLowerCase()

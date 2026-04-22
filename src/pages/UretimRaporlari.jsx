@@ -2,10 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { apiUrl } from '../utils/api'
 
-function bugun() {
-  return new Date().toISOString().slice(0, 10)
-}
-
 const RANGE_OPTIONS = [
   { key: '3d', label: 'Son 3 gun', days: 3 },
   { key: '7d', label: 'Son 1 hafta', days: 7 },
@@ -30,6 +26,12 @@ function addDays(date, delta) {
 
 function parseReportDate(tarih) {
   return startOfDay(`${tarih}T00:00:00`)
+}
+
+function formatDateWithWeekday(tarih) {
+  const days = ['Pazar', 'Pazartesi', 'Sali', 'Carsamba', 'Persembe', 'Cuma', 'Cumartesi']
+  const dayName = days[parseReportDate(tarih).getDay()] || ''
+  return `${tarih} (${dayName})`
 }
 
 function formatKg(value) {
@@ -134,7 +136,7 @@ export default function UretimRaporlari() {
   const seciliGunOzeti = useMemo(() => {
     const gun = raporlar.find((x) => x.tarih === tarih)
     if (!gun) return null
-    return `${gun.tarih} gunu Pres ${formatKg(gun.presTon)}, Eloksal ${formatKg(gun.eloksalTon)} uretim yapti.`
+    return `${formatDateWithWeekday(gun.tarih)} gunu Pres ${formatKg(gun.presTon)}, Eloksal ${formatKg(gun.eloksalTon)} uretim yapti.`
   }, [raporlar, tarih])
 
   const seciliRapor = raporlar.find((x) => x.tarih === tarih) || null
@@ -198,7 +200,6 @@ export default function UretimRaporlari() {
     const paddingX = 18
     const paddingTop = 14
     const plotHeight = 110
-    const labelsY = 145
     const count = series.length
     const width = Math.max(260, (count > 1 ? (count - 1) * 56 : 0) + paddingX * 2)
 
@@ -419,7 +420,7 @@ export default function UretimRaporlari() {
           {raporlar.map((r) => (
             <div key={r.tarih} className="rounded-xl border border-gray-200 p-3 bg-white shadow-sm">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-semibold text-gray-800">{r.tarih}</p>
+                <p className="text-sm font-semibold text-gray-800">{formatDateWithWeekday(r.tarih)}</p>
                 <p className="text-[11px] px-2 py-1 rounded-md bg-gray-100 text-gray-500">Kayitli</p>
               </div>
               <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
