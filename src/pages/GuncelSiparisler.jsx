@@ -316,58 +316,6 @@ export default function GuncelSiparisler() {
           <p className="text-xs text-gray-500">Not: "Termine kalan" ifadesi, teslim termin tarihine kalan gunu gosterir.</p>
         </div>
 
-        <div className="rounded-xl border border-gray-200 p-3 bg-white space-y-2">
-          <p className="text-xs font-medium text-gray-500">Arama ve Filtre</p>
-          <input
-            type="text"
-            value={arama}
-            onChange={(e) => setArama(e.target.value)}
-            placeholder="Ulke, firma, siparis adi veya not ara..."
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
-          />
-          <div className="grid grid-cols-2 gap-2">
-            <select value={ulkeFilter} onChange={(e) => setUlkeFilter(e.target.value)} className="border border-gray-200 rounded-lg px-2 py-2 text-xs bg-white">
-              <option value="all">Ulke: Tum</option>
-              {ulkeler.map((u) => <option key={u} value={u}>{u}</option>)}
-            </select>
-            <select value={firmaFilter} onChange={(e) => setFirmaFilter(e.target.value)} className="border border-gray-200 rounded-lg px-2 py-2 text-xs bg-white">
-              <option value="all">Firma: Tum</option>
-              {firmalar.map((f) => <option key={f} value={f}>{f}</option>)}
-            </select>
-            <select value={durumFilter} onChange={(e) => setDurumFilter(e.target.value)} className="border border-gray-200 rounded-lg px-2 py-2 text-xs bg-white">
-              <option value="all">Durum: Tum</option>
-              <option value="devam">Devam ediyor</option>
-              <option value="tamamlandi">Tamamlandi</option>
-            </select>
-            <select value={sevkFilter} onChange={(e) => setSevkFilter(e.target.value)} className="border border-gray-200 rounded-lg px-2 py-2 text-xs bg-white">
-              <option value="all">Sevk: Tum</option>
-              <option value="sevkEdildi">Sevk edildi</option>
-              <option value="sevkEdilmedi">Sevk edilmedi</option>
-            </select>
-            <select value={terminFilter} onChange={(e) => setTerminFilter(e.target.value)} className="border border-gray-200 rounded-lg px-2 py-2 text-xs bg-white col-span-2">
-              <option value="all">Termin: Tum</option>
-              <option value="geciken">Geciken</option>
-              <option value="bugun">Bugun termin</option>
-              <option value="yaklasan">Yaklasan (0-3 gun)</option>
-              <option value="normal">Normal</option>
-              <option value="terminYok">Termin yok</option>
-            </select>
-            <select value={hazirlikSort} onChange={(e) => setHazirlikSort(e.target.value)} className="border border-gray-200 rounded-lg px-2 py-2 text-xs bg-white col-span-2">
-              <option value="termin">Siralama: Termin oncelikli</option>
-              <option value="pctDesc">Siralama: Hazirlik % (buyukten kucuge)</option>
-              <option value="pctAsc">Siralama: Hazirlik % (kucukten buyuge)</option>
-            </select>
-          </div>
-          <button
-            type="button"
-            onClick={filtreleriSifirla}
-            className="w-full py-2 rounded-lg text-xs font-medium border border-gray-200 text-gray-600 bg-gray-50"
-          >
-            Filtreleri Sifirla
-          </button>
-          <p className="text-[11px] text-gray-400">Gorunen siparis: {filteredItems.length}</p>
-        </div>
-
         <button
           onClick={yukle}
           className="w-full py-2.5 rounded-xl text-sm font-medium border border-gray-200 text-gray-700 bg-white"
@@ -464,6 +412,58 @@ export default function GuncelSiparisler() {
             Filtreye uygun siparis bulunmuyor.
           </div>
         )}
+
+        <div className="rounded-xl border border-gray-200 p-3 bg-white space-y-2">
+          <p className="text-xs font-medium text-gray-500">Arama ve Filtre</p>
+          <input
+            type="text"
+            value={arama}
+            onChange={(e) => setArama(e.target.value)}
+            placeholder="Ulke, firma, siparis adi veya not ara..."
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+          />
+          <div className="space-y-2">
+            <select value={ulkeFilter} onChange={(e) => setUlkeFilter(e.target.value)} className="w-full border border-gray-200 rounded-lg px-2 py-2 text-xs bg-white">
+              <option value="all">Ulke: Tum</option>
+              {ulkeler.map((u) => <option key={u} value={u}>{u}</option>)}
+            </select>
+            <select value={firmaFilter} onChange={(e) => setFirmaFilter(e.target.value)} className="w-full border border-gray-200 rounded-lg px-2 py-2 text-xs bg-white">
+              <option value="all">Firma: Tum</option>
+              {firmalar.map((f) => <option key={f} value={f}>{f}</option>)}
+            </select>
+            <select value={durumFilter} onChange={(e) => setDurumFilter(e.target.value)} className="w-full border border-gray-200 rounded-lg px-2 py-2 text-xs bg-white">
+              <option value="all">Durum: Tum</option>
+              <option value="devam">Devam ediyor</option>
+              <option value="tamamlandi">Tamamlandi</option>
+            </select>
+            <select value={sevkFilter} onChange={(e) => setSevkFilter(e.target.value)} className="w-full border border-gray-200 rounded-lg px-2 py-2 text-xs bg-white">
+              <option value="all">Sevk: Tum</option>
+              <option value="sevkEdildi">Sevk edildi</option>
+              <option value="sevkEdilmedi">Sevk edilmedi</option>
+            </select>
+            <select value={terminFilter} onChange={(e) => setTerminFilter(e.target.value)} className="w-full border border-gray-200 rounded-lg px-2 py-2 text-xs bg-white">
+              <option value="all">Termin: Tum</option>
+              <option value="geciken">Geciken</option>
+              <option value="bugun">Bugun termin</option>
+              <option value="yaklasan">Yaklasan (0-3 gun)</option>
+              <option value="normal">Normal</option>
+              <option value="terminYok">Termin yok</option>
+            </select>
+            <select value={hazirlikSort} onChange={(e) => setHazirlikSort(e.target.value)} className="w-full border border-gray-200 rounded-lg px-2 py-2 text-xs bg-white">
+              <option value="termin">Siralama: Termin oncelikli</option>
+              <option value="pctDesc">Siralama: Hazirlik % (buyukten kucuge)</option>
+              <option value="pctAsc">Siralama: Hazirlik % (kucukten buyuge)</option>
+            </select>
+          </div>
+          <button
+            type="button"
+            onClick={filtreleriSifirla}
+            className="w-full py-2 rounded-lg text-xs font-medium border border-gray-200 text-gray-600 bg-gray-50"
+          >
+            Filtreleri Sifirla
+          </button>
+          <p className="text-[11px] text-gray-400">Gorunen siparis: {filteredItems.length}</p>
+        </div>
       </div>
     </div>
   )
