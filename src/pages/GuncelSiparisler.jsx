@@ -70,6 +70,7 @@ export default function GuncelSiparisler() {
   const [sevkFilter, setSevkFilter] = useState('all')
   const [terminFilter, setTerminFilter] = useState('all')
   const [hazirlikSort, setHazirlikSort] = useState('pctDesc')
+  const [hizliGorunum, setHizliGorunum] = useState('all')
 
   function filtreleriSifirla() {
     setArama('')
@@ -79,6 +80,7 @@ export default function GuncelSiparisler() {
     setSevkFilter('all')
     setTerminFilter('all')
     setHazirlikSort('pctDesc')
+    setHizliGorunum('all')
   }
 
   async function yukle() {
@@ -130,6 +132,7 @@ export default function GuncelSiparisler() {
       const pct = Number(x.ilerlemeYuzde || 0)
       const durumKey = pct >= 100 ? 'tamamlandi' : 'devam'
       const terminKey = x.terminStatus.key
+      const diff = daysUntil(x.terminTarihi)
 
       if (ulkeFilter !== 'all' && x.ulke !== ulkeFilter) return false
       if (firmaFilter !== 'all' && x.firma !== firmaFilter) return false
@@ -142,6 +145,12 @@ export default function GuncelSiparisler() {
         if (terminFilter === 'yaklasan' && !['today', 'soon'].includes(terminKey)) return false
         if (terminFilter === 'normal' && terminKey !== 'normal') return false
         if (terminFilter === 'terminYok' && terminKey !== 'none') return false
+      }
+      if (hizliGorunum !== 'all') {
+        if (hizliGorunum === 'tamamlandi' && pct < 100) return false
+        if (hizliGorunum === 'devam' && pct >= 100) return false
+        if (hizliGorunum === 'geciken' && !(pct < 100 && diff != null && diff < 0)) return false
+        if (hizliGorunum === 'buHaftaTermin' && !(pct < 100 && diff != null && diff >= 0 && diff <= 7)) return false
       }
 
       if (!q) return true
@@ -166,7 +175,7 @@ export default function GuncelSiparisler() {
     }
 
     return filtered
-  }, [arama, ulkeFilter, firmaFilter, durumFilter, sevkFilter, terminFilter, hazirlikSort, enrichedItems])
+  }, [arama, ulkeFilter, firmaFilter, durumFilter, sevkFilter, terminFilter, hazirlikSort, hizliGorunum, enrichedItems])
 
   const ozet = useMemo(() => {
     const toplam = items.length
@@ -237,26 +246,66 @@ export default function GuncelSiparisler() {
         </div>
 
         <div className="grid grid-cols-2 gap-2">
-          <div className="rounded-xl border border-gray-200 p-3 bg-gray-50">
+          <button
+            type="button"
+            onClick={() => setHizliGorunum('all')}
+            className="rounded-xl border p-3 text-left"
+            style={hizliGorunum === 'all'
+              ? { borderColor: '#CC2B1D', backgroundColor: '#FDECEA' }
+              : { borderColor: '#e5e7eb', backgroundColor: '#f9fafb' }
+            }
+          >
             <p className="text-[11px] text-gray-400">Toplam</p>
             <p className="text-base font-semibold text-gray-800">{ozet.toplam}</p>
-          </div>
-          <div className="rounded-xl border border-gray-200 p-3 bg-gray-50">
+          </button>
+          <button
+            type="button"
+            onClick={() => setHizliGorunum('devam')}
+            className="rounded-xl border p-3 text-left"
+            style={hizliGorunum === 'devam'
+              ? { borderColor: '#f59e0b', backgroundColor: '#fffbeb' }
+              : { borderColor: '#e5e7eb', backgroundColor: '#f9fafb' }
+            }
+          >
             <p className="text-[11px] text-gray-400">Devam</p>
             <p className="text-base font-semibold text-amber-600">{ozet.devam}</p>
-          </div>
-          <div className="rounded-xl border border-gray-200 p-3 bg-gray-50">
+          </button>
+          <button
+            type="button"
+            onClick={() => setHizliGorunum('tamamlandi')}
+            className="rounded-xl border p-3 text-left"
+            style={hizliGorunum === 'tamamlandi'
+              ? { borderColor: '#16a34a', backgroundColor: '#f0fdf4' }
+              : { borderColor: '#e5e7eb', backgroundColor: '#f9fafb' }
+            }
+          >
             <p className="text-[11px] text-gray-400">Tamamlandi</p>
             <p className="text-base font-semibold text-green-600">{ozet.tamamlanan}</p>
-          </div>
-          <div className="rounded-xl border border-red-100 p-3 bg-red-50">
+          </button>
+          <button
+            type="button"
+            onClick={() => setHizliGorunum('geciken')}
+            className="rounded-xl border p-3 text-left"
+            style={hizliGorunum === 'geciken'
+              ? { borderColor: '#fca5a5', backgroundColor: '#fee2e2' }
+              : { borderColor: '#fecaca', backgroundColor: '#fef2f2' }
+            }
+          >
             <p className="text-[11px] text-red-400">Geciken siparis</p>
             <p className="text-base font-semibold text-red-700">{ozet.geciken}</p>
-          </div>
-          <div className="rounded-xl border border-amber-100 p-3 bg-amber-50">
+          </button>
+          <button
+            type="button"
+            onClick={() => setHizliGorunum('buHaftaTermin')}
+            className="rounded-xl border p-3 text-left"
+            style={hizliGorunum === 'buHaftaTermin'
+              ? { borderColor: '#f59e0b', backgroundColor: '#fef3c7' }
+              : { borderColor: '#fde68a', backgroundColor: '#fffbeb' }
+            }
+          >
             <p className="text-[11px] text-amber-500">Bu hafta termin</p>
             <p className="text-base font-semibold text-amber-700">{ozet.buHaftaTermin}</p>
-          </div>
+          </button>
           <div className="rounded-xl border border-sky-100 p-3 bg-sky-50">
             <p className="text-[11px] text-sky-500">Icerideki siparis kg</p>
             <p className="text-base font-semibold text-sky-700">{formatKg(iceridekiSiparisOzeti.iceridekiKg)}</p>
@@ -345,6 +394,14 @@ export default function GuncelSiparisler() {
                   <p className="text-xs text-gray-500 mt-0.5">{x.siparisAdi}</p>
                 </div>
                 <div className="flex flex-col items-end gap-1">
+                  {x.sevkEdildi && (
+                    <span className="inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded-md font-semibold bg-sky-100 text-sky-700 border border-sky-200">
+                      <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.78-9.72a.75.75 0 00-1.06-1.06L9.25 10.69 7.28 8.72a.75.75 0 10-1.06 1.06l2.5 2.5a.75.75 0 001.06 0l3.99-4z" clipRule="evenodd" />
+                      </svg>
+                      Sevk edildi
+                    </span>
+                  )}
                   <span
                     className="text-[11px] px-2 py-1 rounded-md font-medium"
                     style={{
