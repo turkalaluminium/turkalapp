@@ -288,12 +288,19 @@ export default function UretimRaporlari() {
 
         <div>
           <label className="block text-xs font-medium text-gray-500 mb-1.5">Tarih</label>
-          <input
-            type="date"
-            value={tarih}
-            onChange={(e) => setTarih(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 focus:outline-none focus:border-gray-400"
-          />
+          <div className="relative">
+            <input
+              type="date"
+              value={tarih}
+              onChange={(e) => setTarih(e.target.value)}
+              className={`w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-gray-400 cursor-pointer ${tarih ? 'border-gray-200 bg-white text-gray-800' : 'border-gray-300 bg-gray-50 text-gray-400'}`}
+            />
+            {!tarih && (
+              <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-gray-400">
+                Tarih sec
+              </span>
+            )}
+          </div>
           <p className="text-[11px] text-gray-400 mt-1">Tarih bos ise ust kartlarda bu ay toplam uretim gorunur.</p>
         </div>
         {hata && <p className="text-xs text-red-500">{hata}</p>}
