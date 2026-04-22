@@ -28,21 +28,33 @@ function hesapla({ gramaj, uzunluk, bazFiyat, delikli }) {
   }
 }
 
+function toEur(usd, eurUsd) {
+  const kur = parseFloat(eurUsd)
+  if (!Number.isFinite(kur) || kur <= 0) return null
+  return usd / kur
+}
+
 export default function Fiyatlandirma() {
   const navigate = useNavigate()
   const [gramaj, setGramaj] = useState('')
   const [uzunluk, setUzunluk] = useState('')
   const [bazFiyat, setBazFiyat] = useState('8')
+  const [eurUsd, setEurUsd] = useState('1.08')
   const [delikli, setDelikli] = useState(false)
   const [sonuc, setSonuc] = useState(null)
   const [hata, setHata] = useState('')
 
   function handleHesapla() {
-    if (!gramaj || !uzunluk || !bazFiyat) {
+    if (!gramaj || !uzunluk || !bazFiyat || !eurUsd) {
       setHata('Lütfen tüm alanları doldurun')
       return
     }
-    if (parseFloat(gramaj) <= 0 || parseFloat(uzunluk) <= 0 || parseFloat(bazFiyat) <= 0) {
+    if (
+      parseFloat(gramaj) <= 0 ||
+      parseFloat(uzunluk) <= 0 ||
+      parseFloat(bazFiyat) <= 0 ||
+      parseFloat(eurUsd) <= 0
+    ) {
       setHata('Değerler sıfırdan büyük olmalı')
       return
     }
@@ -54,6 +66,7 @@ export default function Fiyatlandirma() {
     setGramaj('')
     setUzunluk('')
     setBazFiyat('8')
+    setEurUsd('1.08')
     setDelikli(false)
     setSonuc(null)
     setHata('')
@@ -113,21 +126,38 @@ export default function Fiyatlandirma() {
             </div>
           </div>
 
-          {/* Baz fiyat */}
-          <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1.5">
-              Baz Fiyat <span className="text-gray-300 font-normal">($/kg)</span>
-            </label>
-            <input
-              type="number"
-              inputMode="decimal"
-              value={bazFiyat}
-              onChange={e => setBazFiyat(e.target.value)}
-              placeholder="8.00"
-              step="0.01"
-              min="0"
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-gray-400"
-            />
+          {/* Baz fiyat + manuel kur */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5">
+                Baz Fiyat <span className="text-gray-300 font-normal">($/kg)</span>
+              </label>
+              <input
+                type="number"
+                inputMode="decimal"
+                value={bazFiyat}
+                onChange={e => setBazFiyat(e.target.value)}
+                placeholder="8.00"
+                step="0.01"
+                min="0"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-gray-400"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5">
+                EUR/USD <span className="text-gray-300 font-normal">(manuel)</span>
+              </label>
+              <input
+                type="number"
+                inputMode="decimal"
+                value={eurUsd}
+                onChange={e => setEurUsd(e.target.value)}
+                placeholder="1.08"
+                step="0.0001"
+                min="0"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-gray-400"
+              />
+            </div>
           </div>
 
           {/* Delik durumu */}
@@ -195,12 +225,17 @@ export default function Fiyatlandirma() {
                 <div>
                   <p className="text-xs font-medium" style={{ color: '#CC2B1D' }}>Mat Gümüş Anodize — Baz Fiyat</p>
                   <p className="text-xs text-gray-400 mt-0.5">
-                    {delikli ? 'Delikli: ×0.86 indirim uygulandı' : 'Deliksiz profil'}
+                    {delikli ? 'Delikli: ×0.86 indirim uygulandı' : 'Deliksiz profil'} - Kur: {eurUsd}
                   </p>
                 </div>
-                <p className="text-2xl font-bold" style={{ color: '#CC2B1D' }}>
-                  ${sonuc.mattSilverBaz.toFixed(2)}
-                </p>
+                <div className="text-right">
+                  <p className="text-2xl font-bold" style={{ color: '#CC2B1D' }}>
+                    ${sonuc.mattSilverBaz.toFixed(2)}
+                  </p>
+                  <p className="text-sm font-semibold text-gray-600">
+                    €{toEur(sonuc.mattSilverBaz, eurUsd)?.toFixed(2) || '-'}
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -236,6 +271,9 @@ export default function Fiyatlandirma() {
                   >
                     ${k.fiyat.toFixed(2)}
                   </p>
+                  <p className="text-xs font-semibold mt-0.5" style={{ color: k.dark ? '#ddd' : '#6b7280' }}>
+                    €{toEur(k.fiyat, eurUsd)?.toFixed(2) || '-'}
+                  </p>
                 </div>
               ))}
             </div>
@@ -254,6 +292,10 @@ export default function Fiyatlandirma() {
               <div className="flex justify-between text-xs">
                 <span className="text-gray-400">Baz Fiyat</span>
                 <span className="font-medium text-gray-700">${bazFiyat}/kg</span>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span className="text-gray-400">EUR/USD (manuel)</span>
+                <span className="font-medium text-gray-700">{eurUsd}</span>
               </div>
               <div className="flex justify-between text-xs">
                 <span className="text-gray-400">Delik İndirimi</span>
