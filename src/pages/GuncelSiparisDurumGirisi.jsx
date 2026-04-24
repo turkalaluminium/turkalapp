@@ -27,6 +27,7 @@ export default function GuncelSiparisDurumGirisi() {
   const navigate = useNavigate()
   const [items, setItems] = useState([])
   const [form, setForm] = useState(INITIAL_FORM)
+  const [siparisNoArama, setSiparisNoArama] = useState('')
   const [loading, setLoading] = useState(false)
   const [kaydediliyor, setKaydediliyor] = useState(false)
   const [hata, setHata] = useState('')
@@ -90,8 +91,28 @@ export default function GuncelSiparisDurumGirisi() {
 
   function yeniSiparisModu() {
     setForm(INITIAL_FORM)
+    setSiparisNoArama('')
     setMesaj('')
     setHata('')
+  }
+
+  function siparisNoIleGetir() {
+    const aranan = String(siparisNoArama || '').trim().toLowerCase()
+    if (!aranan) {
+      setHata('Lutfen siparis numarasi gir')
+      setMesaj('')
+      return
+    }
+
+    const eslesen = items.find((x) => String(x.siparisNo || '').trim().toLowerCase() === aranan)
+    if (!eslesen) {
+      setHata('Bu siparis numarasina ait kayit bulunamadi')
+      setMesaj('')
+      return
+    }
+
+    seciliYukle(eslesen)
+    setMesaj('Siparis bulundu, duzenleyip kaydedebilirsin')
   }
 
   async function kaydet() {
@@ -174,6 +195,30 @@ export default function GuncelSiparisDurumGirisi() {
 
         <div className="space-y-2">
           <label className="block text-xs font-medium text-gray-500">Kayitli Siparisten Doldur (opsiyonel)</label>
+          <div className="space-y-2">
+            <form
+              className="flex gap-2"
+              onSubmit={(e) => {
+                e.preventDefault()
+                siparisNoIleGetir()
+              }}
+            >
+              <input
+                type="text"
+                value={siparisNoArama}
+                onChange={(e) => setSiparisNoArama(e.target.value)}
+                placeholder="Siparis no yaz..."
+                className="flex-1 border border-gray-200 rounded-xl px-3 py-3 text-sm"
+              />
+              <button
+                type="submit"
+                className="px-4 rounded-xl text-sm font-medium border border-gray-200 text-gray-700 bg-white"
+              >
+                Goster
+              </button>
+            </form>
+            <p className="text-[11px] text-gray-400">Siparis numarasini yazip Goster deyince ilgili kayit forma yuklenir.</p>
+          </div>
           <select
             defaultValue=""
             onChange={(e) => {

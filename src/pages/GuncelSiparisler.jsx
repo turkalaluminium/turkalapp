@@ -64,6 +64,8 @@ export default function GuncelSiparisler() {
   const [loading, setLoading] = useState(false)
   const [hata, setHata] = useState('')
   const [arama, setArama] = useState('')
+  const [siparisNoArama, setSiparisNoArama] = useState('')
+  const [siparisNoFilter, setSiparisNoFilter] = useState('')
   const [ulkeFilter, setUlkeFilter] = useState('all')
   const [firmaFilter, setFirmaFilter] = useState('all')
   const [durumFilter, setDurumFilter] = useState('all')
@@ -74,6 +76,8 @@ export default function GuncelSiparisler() {
 
   function filtreleriSifirla() {
     setArama('')
+    setSiparisNoArama('')
+    setSiparisNoFilter('')
     setUlkeFilter('all')
     setFirmaFilter('all')
     setDurumFilter('all')
@@ -128,6 +132,7 @@ export default function GuncelSiparisler() {
 
   const filteredItems = useMemo(() => {
     const q = String(arama || '').trim().toLowerCase()
+    const siparisNoQ = String(siparisNoFilter || '').trim().toLowerCase()
     const filtered = enrichedItems.filter((x) => {
       const pct = Number(x.ilerlemeYuzde || 0)
       const durumKey = pct >= 100 ? 'tamamlandi' : 'devam'
@@ -152,9 +157,10 @@ export default function GuncelSiparisler() {
         if (hizliGorunum === 'geciken' && !(pct < 100 && diff != null && diff < 0)) return false
         if (hizliGorunum === 'buHaftaTermin' && !(pct < 100 && diff != null && diff >= 0 && diff <= 7)) return false
       }
+      if (siparisNoQ && String(x.siparisNo || '').trim().toLowerCase() !== siparisNoQ) return false
 
       if (!q) return true
-      const alan = `${x.ulke} ${x.firma} ${x.siparisAdi} ${x.durumNotu || ''}`.toLowerCase()
+      const alan = `${x.ulke} ${x.firma} ${x.siparisAdi} ${x.siparisNo || ''} ${x.durumNotu || ''}`.toLowerCase()
       return alan.includes(q)
     })
 
@@ -175,7 +181,7 @@ export default function GuncelSiparisler() {
     }
 
     return filtered
-  }, [arama, ulkeFilter, firmaFilter, durumFilter, sevkFilter, terminFilter, hazirlikSort, hizliGorunum, enrichedItems])
+  }, [arama, siparisNoFilter, ulkeFilter, firmaFilter, durumFilter, sevkFilter, terminFilter, hazirlikSort, hizliGorunum, enrichedItems])
 
   const ozet = useMemo(() => {
     const toplam = items.length
@@ -318,11 +324,48 @@ export default function GuncelSiparisler() {
 
         <div className="rounded-xl border border-gray-200 p-3 bg-white space-y-2">
           <p className="text-xs font-medium text-gray-500">Arama ve Filtre</p>
+          <form
+            className="flex gap-2"
+            onSubmit={(e) => {
+              e.preventDefault()
+              const value = String(siparisNoArama || '').trim()
+              setSiparisNoFilter(value)
+            }}
+          >
+            <input
+              type="text"
+              value={siparisNoArama}
+              onChange={(e) => setSiparisNoArama(e.target.value)}
+              placeholder="Siparis numarasi yaz..."
+              className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            />
+            <button
+              type="submit"
+              className="px-4 rounded-lg text-xs font-medium border border-gray-200 text-gray-700 bg-white"
+            >
+              Goster
+            </button>
+          </form>
+          {siparisNoFilter && (
+            <div className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2">
+              <p className="text-[11px] text-gray-500">Siparis No filtresi: <span className="font-medium text-gray-700">{siparisNoFilter}</span></p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSiparisNoArama('')
+                  setSiparisNoFilter('')
+                }}
+                className="text-[11px] text-gray-500 underline"
+              >
+                Temizle
+              </button>
+            </div>
+          )}
           <input
             type="text"
             value={arama}
             onChange={(e) => setArama(e.target.value)}
-            placeholder="Ulke, firma, siparis adi veya not ara..."
+            placeholder="Ulke, firma, siparis adi/no veya not ara..."
             className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
           />
           <div className="grid grid-cols-2 gap-2">
