@@ -8,6 +8,13 @@ function bugun() {
   return new Date().toISOString().slice(0, 10)
 }
 
+function normalizeSiparisNo(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[\s-_/]+/g, '')
+}
+
 const INITIAL_FORM = {
   id: '',
   ulke: '',
@@ -97,16 +104,24 @@ export default function GuncelSiparisDurumGirisi() {
   }
 
   function siparisNoIleGetir() {
-    const aranan = String(siparisNoArama || '').trim().toLowerCase()
+    const arananRaw = String(siparisNoArama || '').trim()
+    const aranan = normalizeSiparisNo(arananRaw)
     if (!aranan) {
       setHata('Lutfen siparis numarasi gir')
       setMesaj('')
       return
     }
 
-    const eslesen = items.find((x) => String(x.siparisNo || '').trim().toLowerCase() === aranan)
+    const eslesen =
+      // Oncelik: siparisNo birebir
+      items.find((x) => normalizeSiparisNo(x.siparisNo) === aranan)
+      // Sonra: siparisNo iceren
+      || items.find((x) => normalizeSiparisNo(x.siparisNo).includes(aranan))
+      // Son olarak: bazi eski kayitlarda no siparis adinda geciyor olabilir
+      || items.find((x) => normalizeSiparisNo(x.siparisAdi).includes(aranan))
+
     if (!eslesen) {
-      setHata('Bu siparis numarasina ait kayit bulunamadi')
+      setHata(`"${arananRaw}" icin kayit bulunamadi`)
       setMesaj('')
       return
     }
