@@ -36,6 +36,21 @@ function completionDays(item) {
   return Math.max(0, Math.round((end - start) / DAY_MS))
 }
 
+function isCompletedOrder(item) {
+  if (!item) return false
+  if (Number(item.ilerlemeYuzde || 0) >= 100) return true
+  return Boolean(String(item.tamamlanmaTarihi || '').trim())
+}
+
+function isShippedOrder(item) {
+  const value = item?.sevkEdildi
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase()
+    return ['true', '1', 'evet', 'yes'].includes(normalized)
+  }
+  return Boolean(value)
+}
+
 function getTerminStatus(item) {
   const pct = Number(item.ilerlemeYuzde || 0)
   if (pct >= 100) {
@@ -220,12 +235,18 @@ export default function GuncelSiparisler() {
   const iceridekiSiparisOzeti = useMemo(() => {
     const toplamSiparisKg = items.reduce((acc, x) => acc + Number(x.siparisKg || 0), 0)
     const sevkEdilenKg = items.reduce((acc, x) => {
-      if (!x.sevkEdildi) return acc
+      if (!isShippedOrder(x)) return acc
+      return acc + Number(x.siparisKg || 0)
+    }, 0)
+    const tamamlananSevkEdilmemisKg = items.reduce((acc, x) => {
+      if (!isCompletedOrder(x)) return acc
+      if (isShippedOrder(x)) return acc
       return acc + Number(x.siparisKg || 0)
     }, 0)
     return {
       iceridekiKg: Math.max(0, toplamSiparisKg - sevkEdilenKg),
       sevkEdilenKg,
+      tamamlananSevkEdilmemisKg,
     }
   }, [items])
 
@@ -315,6 +336,10 @@ export default function GuncelSiparisler() {
           <div className="rounded-xl border border-sky-100 p-3 bg-sky-50">
             <p className="text-[11px] text-sky-500">Icerideki siparis kg</p>
             <p className="text-base font-semibold text-sky-700">{formatKg(iceridekiSiparisOzeti.iceridekiKg)}</p>
+          </div>
+          <div className="rounded-xl border border-emerald-100 p-3 bg-emerald-50">
+            <p className="text-[11px] text-emerald-600">Tamamlandi, sevk edilmedi kg</p>
+            <p className="text-base font-semibold text-emerald-700">{formatKg(iceridekiSiparisOzeti.tamamlananSevkEdilmemisKg)}</p>
           </div>
         </div>
 
