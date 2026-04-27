@@ -157,8 +157,8 @@ export default function GuncelSiparisler() {
       if (ulkeFilter !== 'all' && x.ulke !== ulkeFilter) return false
       if (firmaFilter !== 'all' && x.firma !== firmaFilter) return false
       if (durumFilter !== 'all' && durumKey !== durumFilter) return false
-      if (sevkFilter === 'sevkEdildi' && !x.sevkEdildi) return false
-      if (sevkFilter === 'sevkEdilmedi' && x.sevkEdildi) return false
+      if (sevkFilter === 'sevkEdildi' && !isShippedOrder(x)) return false
+      if (sevkFilter === 'sevkEdilmedi' && isShippedOrder(x)) return false
       if (terminFilter !== 'all') {
         if (terminFilter === 'geciken' && terminKey !== 'late') return false
         if (terminFilter === 'bugun' && terminKey !== 'today') return false
@@ -171,6 +171,7 @@ export default function GuncelSiparisler() {
         if (hizliGorunum === 'devam' && pct >= 100) return false
         if (hizliGorunum === 'geciken' && !(pct < 100 && diff != null && diff < 0)) return false
         if (hizliGorunum === 'buHaftaTermin' && !(pct < 100 && diff != null && diff >= 0 && diff <= 7)) return false
+        if (hizliGorunum === 'tamamlandiSevkEdilmedi' && !(isCompletedOrder(x) && !isShippedOrder(x))) return false
       }
       if (siparisNoQ && String(x.siparisNo || '').trim().toLowerCase() !== siparisNoQ) return false
 
@@ -337,10 +338,18 @@ export default function GuncelSiparisler() {
             <p className="text-[11px] text-sky-500">Icerideki siparis kg</p>
             <p className="text-base font-semibold text-sky-700">{formatKg(iceridekiSiparisOzeti.iceridekiKg)}</p>
           </div>
-          <div className="rounded-xl border border-emerald-100 p-3 bg-emerald-50">
+          <button
+            type="button"
+            onClick={() => setHizliGorunum('tamamlandiSevkEdilmedi')}
+            className="rounded-xl border p-3 text-left"
+            style={hizliGorunum === 'tamamlandiSevkEdilmedi'
+              ? { borderColor: '#10b981', backgroundColor: '#ecfdf5' }
+              : { borderColor: '#d1fae5', backgroundColor: '#ecfdf5' }
+            }
+          >
             <p className="text-[11px] text-emerald-600">Tamamlandi, sevk edilmedi kg</p>
             <p className="text-base font-semibold text-emerald-700">{formatKg(iceridekiSiparisOzeti.tamamlananSevkEdilmemisKg)}</p>
-          </div>
+          </button>
         </div>
 
         <div className="rounded-xl border border-gray-200 px-3 py-2 bg-white">
@@ -465,7 +474,7 @@ export default function GuncelSiparisler() {
                   )}
                 </div>
                 <div className="flex flex-col items-end gap-1">
-                  {x.sevkEdildi && (
+                  {isShippedOrder(x) && (
                     <span className="inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded-md font-semibold bg-sky-100 text-sky-700 border border-sky-200">
                       <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.78-9.72a.75.75 0 00-1.06-1.06L9.25 10.69 7.28 8.72a.75.75 0 10-1.06 1.06l2.5 2.5a.75.75 0 001.06 0l3.99-4z" clipRule="evenodd" />
