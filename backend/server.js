@@ -188,6 +188,10 @@ const CURRENT_ORDERS_FILE = path.resolve(resolveDataFilePath({
   envValue: process.env.CURRENT_ORDERS_FILE,
   fallbackFileName: 'current-orders.json',
 }))
+const PRESS_ORDER_KG_FILE = path.resolve(resolveDataFilePath({
+  envValue: process.env.PRESS_ORDER_KG_FILE,
+  fallbackFileName: 'press-order-kg.json',
+}))
 
 function normalizeOrder(x) {
   const rawPct = Number(x?.ilerlemeYuzde ?? 0)
@@ -237,6 +241,33 @@ function writeCurrentOrders(items) {
   fs.writeFileSync(CURRENT_ORDERS_FILE, JSON.stringify(items, null, 2), 'utf8')
 }
 
+function normalizePressOrderKg(x) {
+  const rawKg = Number(x?.kg ?? 0)
+  const kg = Number.isFinite(rawKg) && rawKg >= 0 ? rawKg : 0
+  return {
+    kg,
+    guncellenme: String(x?.guncellenme || ''),
+  }
+}
+
+function readPressOrderKg() {
+  try {
+    if (!fs.existsSync(PRESS_ORDER_KG_FILE)) return { kg: 0, guncellenme: '' }
+    const raw = fs.readFileSync(PRESS_ORDER_KG_FILE, 'utf8')
+    const parsed = JSON.parse(raw || '{}')
+    return normalizePressOrderKg(parsed)
+  } catch (err) {
+    console.error('Presteki siparis kg okuma hatasi:', err.message)
+    return { kg: 0, guncellenme: '' }
+  }
+}
+
+function writePressOrderKg(item) {
+  const dir = path.dirname(PRESS_ORDER_KG_FILE)
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
+  fs.writeFileSync(PRESS_ORDER_KG_FILE, JSON.stringify(item, null, 2), 'utf8')
+}
+
 app.get('/api/current-orders', (req, res) => {
   const items = readCurrentOrders()
   res.json({ total: items.length, items })
@@ -282,6 +313,30 @@ app.post('/api/current-orders', (req, res) => {
   } catch (err) {
     console.error('Guncel siparis yazma hatasi:', err.message)
     return res.status(500).json({ error: 'Guncel siparis kaydedilemedi' })
+  }
+})
+
+app.get('/api/press-order-kg', (req, res) => {
+  const item = readPressOrderKg()
+  res.json({ item })
+})
+
+app.post('/api/press-order-kg', (req, res) => {
+  const rawKg = Number(req.body?.kg)
+  if (!Number.isFinite(rawKg) || rawKg < 0) {
+    return res.status(400).json({ error: 'kg 0 veya buyuk olmali' })
+  }
+  const payload = {
+    kg: rawKg,
+    guncellenme: new Date().toISOString(),
+  }
+
+  try {
+    writePressOrderKg(payload)
+    return res.json({ ok: true, item: payload })
+  } catch (err) {
+    console.error('Presteki siparis kg yazma hatasi:', err.message)
+    return res.status(500).json({ error: 'Presteki siparis kg kaydedilemedi' })
   }
 })
 
@@ -826,6 +881,8 @@ app.listen(PORT, () => {
   console.log(`   - ProdW:  POST /api/production-reports`)
   console.log(`   - Order:  GET  /api/current-orders`)
   console.log(`   - OrderW: POST /api/current-orders`)
+  console.log(`   - Press:  GET  /api/press-order-kg`)
+  console.log(`   - PressW: POST /api/press-order-kg`)
   if (TECH_DRAWINGS_DIR) {
     console.log(`   - Cizim klasoru: ${TECH_DRAWINGS_DIR}`)
   } else {

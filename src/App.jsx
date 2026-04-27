@@ -8,6 +8,7 @@ import UretimRaporlari from './pages/UretimRaporlari'
 import UretimRaporGirisi from './pages/UretimRaporGirisi'
 import GuncelSiparisler from './pages/GuncelSiparisler'
 import GuncelSiparisDurumGirisi from './pages/GuncelSiparisDurumGirisi'
+import PrestekiSiparisGirisi from './pages/PrestekiSiparisGirisi'
 import RequireRole from './components/RequireRole'
 import { ROLES } from './utils/auth'
 
@@ -27,6 +28,7 @@ export default function App() {
           <Route path="/uretim-rapor-girisi" element={<RequireRole roles={[ROLES.OPERATOR]}><UretimRaporGirisi /></RequireRole>} />
           <Route path="/guncel-siparisler" element={<RequireRole roles={[ROLES.PATRON]}><GuncelSiparisler /></RequireRole>} />
           <Route path="/guncel-siparis-durum-girisi" element={<RequireRole roles={[ROLES.OPERATOR]}><GuncelSiparisDurumGirisi /></RequireRole>} />
+          <Route path="/presteki-siparis-girisi" element={<RequireRole roles={[ROLES.OPERATOR]}><PrestekiSiparisGirisi /></RequireRole>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>

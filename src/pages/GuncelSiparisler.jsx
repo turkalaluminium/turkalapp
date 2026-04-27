@@ -76,6 +76,7 @@ function getTerminStatus(item) {
 export default function GuncelSiparisler() {
   const navigate = useNavigate()
   const [items, setItems] = useState([])
+  const [prestekiSiparisKg, setPrestekiSiparisKg] = useState(0)
   const [loading, setLoading] = useState(false)
   const [hata, setHata] = useState('')
   const [arama, setArama] = useState('')
@@ -109,6 +110,16 @@ export default function GuncelSiparisler() {
       const data = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(data?.error || `HTTP ${res.status}`)
       setItems(Array.isArray(data.items) ? data.items : [])
+      try {
+        const pressRes = await fetch(apiUrl('/api/press-order-kg'))
+        const pressData = await pressRes.json().catch(() => ({}))
+        if (pressRes.ok) {
+          const kg = Number(pressData?.item?.kg || 0)
+          setPrestekiSiparisKg(Number.isFinite(kg) ? Math.max(0, kg) : 0)
+        }
+      } catch {
+        // Presteki siparis kg endpointi gecici olarak erisilemezse ekrani bozma.
+      }
       setHata('')
     } catch (err) {
       setHata(err.message || 'Siparisler alinamadi')
@@ -350,6 +361,10 @@ export default function GuncelSiparisler() {
             <p className="text-[11px] text-emerald-600">Tamamlandi, sevk edilmedi kg</p>
             <p className="text-base font-semibold text-emerald-700">{formatKg(iceridekiSiparisOzeti.tamamlananSevkEdilmemisKg)}</p>
           </button>
+          <div className="rounded-xl border border-violet-100 p-3 bg-violet-50">
+            <p className="text-[11px] text-violet-600">Henuz preste basilmamis siparis kg</p>
+            <p className="text-base font-semibold text-violet-700">{formatKg(prestekiSiparisKg)}</p>
+          </div>
         </div>
 
         <div className="rounded-xl border border-gray-200 px-3 py-2 bg-white">

@@ -144,6 +144,24 @@ export default function Menu() {
 
         {role === ROLES.OPERATOR && (
           <button
+            onClick={() => navigate('/presteki-siparis-girisi')}
+            className="w-full text-left p-5 rounded-xl border-2 bg-white active:bg-red-50 transition-colors"
+            style={{ borderColor: '#F1C5C1' }}
+          >
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0" style={{ backgroundColor: '#FDECEA' }}>
+                ⚙️
+              </div>
+              <div>
+                <p className="font-semibold text-gray-800 text-base">Henuz Preste Basilmamis Siparis Kg</p>
+                <p className="text-gray-400 text-sm mt-0.5">Henuz preste basilmamis siparis kg degerini kaydet</p>
+              </div>
+            </div>
+          </button>
+        )}
+
+        {role === ROLES.OPERATOR && (
+          <button
             onClick={() => navigate('/guncel-siparis-durum-girisi')}
             className="w-full text-left p-5 rounded-xl border-2 bg-white active:bg-red-50 transition-colors"
             style={{ borderColor: '#F1C5C1' }}
