@@ -75,6 +75,10 @@ function getTerminStatus(item) {
 
 export default function GuncelSiparisler() {
   const navigate = useNavigate()
+  const [seciliAy, setSeciliAy] = useState(() => {
+    const now = new Date()
+    return new Date(now.getFullYear(), now.getMonth(), 1)
+  })
   const [items, setItems] = useState([])
   const [prestekiSiparisKg, setPrestekiSiparisKg] = useState(0)
   const [loading, setLoading] = useState(false)
@@ -89,6 +93,12 @@ export default function GuncelSiparisler() {
   const [terminFilter, setTerminFilter] = useState('all')
   const [hazirlikSort, setHazirlikSort] = useState('pctDesc')
   const [hizliGorunum, setHizliGorunum] = useState('all')
+  const mevcutAyIndex = useMemo(() => {
+    const now = new Date()
+    return now.getFullYear() * 12 + now.getMonth()
+  }, [])
+  const seciliAyIndex = seciliAy.getFullYear() * 12 + seciliAy.getMonth()
+  const sonrakiAyDevreDisi = seciliAyIndex >= mevcutAyIndex
 
   function filtreleriSifirla() {
     setArama('')
@@ -228,11 +238,10 @@ export default function GuncelSiparisler() {
   }, [items])
 
   const aylikSevkOzeti = useMemo(() => {
-    const now = new Date()
-    const month = now.getMonth()
-    const year = now.getFullYear()
+    const month = seciliAy.getMonth()
+    const year = seciliAy.getFullYear()
     const toplamKg = items.reduce((acc, x) => {
-      if (!(Number(x.ilerlemeYuzde || 0) >= 100) || !x.sevkEdildi || !x.tamamlanmaTarihi) return acc
+      if (!isCompletedOrder(x) || !isShippedOrder(x) || !x.tamamlanmaTarihi) return acc
       const t = new Date(`${x.tamamlanmaTarihi}T00:00:00`)
       if (Number.isNaN(t.getTime())) return acc
       if (t.getMonth() !== month || t.getFullYear() !== year) return acc
@@ -242,7 +251,7 @@ export default function GuncelSiparisler() {
       ayLabel: AY_ADLARI[month] || 'Bu Ay',
       toplamKg,
     }
-  }, [items])
+  }, [items, seciliAy])
 
   const iceridekiSiparisOzeti = useMemo(() => {
     const toplamSiparisKg = items.reduce((acc, x) => acc + Number(x.siparisKg || 0), 0)
@@ -279,7 +288,35 @@ export default function GuncelSiparisler() {
 
       <div className="px-5 py-5 space-y-3">
         <div className="rounded-2xl p-4 text-white shadow-sm" style={{ backgroundColor: '#CC2B1D' }}>
-          <p className="text-xs text-white/80 mb-1">{aylikSevkOzeti.ayLabel} Ay</p>
+          <div className="flex items-center justify-between mb-2">
+            <button
+              type="button"
+              onClick={() => {
+                setSeciliAy((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))
+              }}
+              className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-white/30 text-white/90 hover:bg-white/10"
+              aria-label="Onceki ay"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <p className="text-xs text-white/80">{aylikSevkOzeti.ayLabel} {seciliAy.getFullYear()}</p>
+            <button
+              type="button"
+              onClick={() => {
+                if (sonrakiAyDevreDisi) return
+                setSeciliAy((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1))
+              }}
+              className={`inline-flex h-7 w-7 items-center justify-center rounded-md border border-white/30 text-white/90 ${sonrakiAyDevreDisi ? 'opacity-40 cursor-not-allowed' : 'hover:bg-white/10'}`}
+              aria-label="Sonraki ay"
+              disabled={sonrakiAyDevreDisi}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
           <p className="text-2xl font-semibold">{formatKg(aylikSevkOzeti.toplamKg)}</p>
           <p className="text-[11px] text-white/80 mt-1">Tamamlanan + sevk edilen siparisler toplami</p>
         </div>
