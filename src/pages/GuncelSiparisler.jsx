@@ -254,6 +254,8 @@ export default function GuncelSiparisler() {
   }, [items, seciliAy])
 
   const iceridekiSiparisOzeti = useMemo(() => {
+    const month = seciliAy.getMonth()
+    const year = seciliAy.getFullYear()
     const toplamSiparisKg = items.reduce((acc, x) => acc + Number(x.siparisKg || 0), 0)
     const sevkEdilenKg = items.reduce((acc, x) => {
       if (!isShippedOrder(x)) return acc
@@ -262,6 +264,10 @@ export default function GuncelSiparisler() {
     const tamamlananSevkEdilmemisKg = items.reduce((acc, x) => {
       if (!isCompletedOrder(x)) return acc
       if (isShippedOrder(x)) return acc
+      if (!x.tamamlanmaTarihi) return acc
+      const t = new Date(`${x.tamamlanmaTarihi}T00:00:00`)
+      if (Number.isNaN(t.getTime())) return acc
+      if (t.getMonth() !== month || t.getFullYear() !== year) return acc
       return acc + Number(x.siparisKg || 0)
     }, 0)
     return {
@@ -269,7 +275,7 @@ export default function GuncelSiparisler() {
       sevkEdilenKg,
       tamamlananSevkEdilmemisKg,
     }
-  }, [items])
+  }, [items, seciliAy])
 
   return (
     <div className="flex flex-col min-h-screen bg-white safe-top safe-bottom">
