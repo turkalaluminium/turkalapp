@@ -261,6 +261,11 @@ export default function GuncelSiparisler() {
       if (!isShippedOrder(x)) return acc
       return acc + Number(x.siparisKg || 0)
     }, 0)
+    const tamamlananSevkEdilmemisKgToplam = items.reduce((acc, x) => {
+      if (!isCompletedOrder(x)) return acc
+      if (isShippedOrder(x)) return acc
+      return acc + Number(x.siparisKg || 0)
+    }, 0)
     const tamamlananSevkEdilmemisKg = items.reduce((acc, x) => {
       if (!isCompletedOrder(x)) return acc
       if (isShippedOrder(x)) return acc
@@ -271,7 +276,7 @@ export default function GuncelSiparisler() {
       return acc + Number(x.siparisKg || 0)
     }, 0)
     return {
-      iceridekiKg: Math.max(0, toplamSiparisKg - sevkEdilenKg - tamamlananSevkEdilmemisKg),
+      iceridekiKg: Math.max(0, toplamSiparisKg - sevkEdilenKg - tamamlananSevkEdilmemisKgToplam),
       sevkEdilenKg,
       tamamlananSevkEdilmemisKg,
     }
